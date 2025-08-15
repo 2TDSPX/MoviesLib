@@ -1,0 +1,74 @@
+[
+	{
+		"id": 1,
+		"title": "Vingadores: Guerra Infinita",
+		"categories": "Ação, Aventura, Fantasia",
+		"duration": "2h 29min",
+		"rating": 8.8,
+		"synopsis": "Os Vingadores e seus aliados devem estar dispostos a sacrificar tudo na tentativa de derrotar o poderoso Thanos antes que sua onda de devastação e destruição ponha fim ao universo.",
+		"image": "avengers"
+	},
+	{
+		"id": 2,
+		"title": "Deadpool 2",
+		"categories": "Ação, Aventura, Comédia",
+		"duration": "1h 59min",
+		"rating": 8.1,
+		"synopsis": "O mercenário mutante de língua afiada Wade Wilson (também conhecido como Deadpool) reúne uma equipe de outros mutantes fora da lei para proteger um jovem com habilidades sobrenaturais do brutal ciborgue viajante do tempo, Cable.",
+		"image": "deadpool2"
+	},
+	{
+		"id": 3,
+		"title": "Han Solo: Uma História Star Wars",
+		"categories": "Ação, Aventura, Fantasia",
+		"duration": "2h 15min",
+		"rating": 7.2,
+		"synopsis": "Durante uma aventura no submundo do crime, Han Solo conhece seu futuro copiloto Chewbacca e encontra Lando Calrissian anos antes de se juntar à Rebelião.",
+		"image": "hansolo"
+	},
+	{
+		"id": 4,
+		"title": "Jurassic World: Reino Ameaçado",
+		"categories": "Ação, Aventura, Ficção Científica",
+		"duration": "2h 8min",
+		"rating": 6.8,
+		"synopsis": "Quando o vulcão adormecido da ilha começa a rugir novamente, Owen e Claire iniciam uma campanha para resgatar os dinossauros restantes desse evento de extinção em massa.",
+		"image": "jurassic"
+	},
+	{
+		"id": 5,
+		"title": "Matrix",
+		"categories": "Ação, Ficção Científica",
+		"duration": "2h 19min",
+		"rating": 10.0,
+		"synopsis": "Um hacker de computadores aprende, com rebeldes misteriosos, sobre a verdadeira natureza de sua realidade e seu papel na guerra contra seus controladores.",
+		"image": "matrix"
+	},
+	{
+		"id": 6,
+		"title": "Jogador Nº 1",
+		"categories": "Ação, Aventura, Ficção Científica",
+		"duration": "2h 20min",
+		"rating": 7.8,
+		"synopsis": "Quando o criador de um mundo de realidade virtual chamado OASIS morre, ele libera um vídeo no qual desafia todos os usuários do OASIS a encontrar seu Easter Egg, que dará ao descobridor sua fortuna.",
+		"image": "readyplayer1"
+	},
+	{
+		"id": 7,
+		"title": "A Forma da Água",
+		"categories": "Aventura, Drama, Fantasia",
+		"duration": "2h 3min",
+		"rating": 7.4,
+		"synopsis": "At a top secret research facility in the 1960s, a lonely janitor forms a unique relationship with an amphibious creature that is being held in captivity.",
+		"image": "shapewater"
+	},
+	{
+		"id": 8,
+		"title": "Toy Story 3",
+		"categories": "Animation, Adventure, Comedy",
+		"duration": "1h 43min",
+		"rating": 8.3,
+		"synopsis": "The toys are mistakenly delivered to a day-care center instead of the attic right before Andy leaves for college, and it's up to Woody to convince the other toys that they weren't abandoned and to return home.",
+		"image": "toystory3"
+	}
+]

@@ -1,7 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
-import { Button, StyleSheet, Text, View } from 'react-native';
-
-import { NavigationContainer } from '@react-navigation/native';
+import { Button, StyleSheet } from 'react-native';
+import { NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'; 
 
 import MainTabs from './src/components/MainTabs';
@@ -12,7 +10,11 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      theme={{
+        ...DefaultTheme, colors: { ...DefaultTheme.colors, background: 'white', primary: '#EB4435' }
+      }}
+    >
       <Stack.Navigator>
         <Stack.Screen
           name="MainTabs"
@@ -22,12 +24,28 @@ export default function App() {
         <Stack.Screen
           name="MovieDetailsScreen"
           component={MovieDetailsScreen}
-          options={{  }}
+          options={({ navigation }) => ({
+            headerBackButtonDisplayMode: 'minimal',
+            headerRight: () => (
+              <Button
+                title='Editar'
+                onPress={() => navigation.navigate('MovieFormScreen')}
+              />
+            )
+          })}
         />
         <Stack.Screen
           name="MovieFormScreen"
           component={MovieFormScreen}
-          options={{  }}
+          options={({ navigation }) => ({
+            headerBackButtonDisplayMode: 'minimal',
+            headerRight: () => (
+              <Button
+                title='Voltar ao início'
+                onPress={() => navigation.popToTop()}
+              />
+            )
+          })}
         />
       </Stack.Navigator>
     </NavigationContainer>
