@@ -30,7 +30,7 @@ const MovieListScreen = () => {
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
                         <TouchableOpacity
-                            onPress={() => navigation.navigate('MovieDetailsScreen')}
+                            onPress={() => navigation.navigate('MovieDetailsScreen', { movie: item })}
                         >
                             <MovieRow movie={item} />
                         </TouchableOpacity>
