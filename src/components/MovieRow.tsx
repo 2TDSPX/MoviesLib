@@ -7,14 +7,14 @@ export type Movie = {
     duration: string;
     rating: number;
     synopsis: string;
-    image: string;
+    poster: string;
 }
 
 export default function MovieRow({movie}: {movie: Movie}) {
     return(
         <View style={ styles.container }>
             <Image
-                source={require('../../assets/matrix.png')}
+                source={ {uri: movie.poster } }
                 style={ styles.image }
             />
             <Text style={ styles.title }>{movie.title}</Text>
@@ -25,9 +25,10 @@ export default function MovieRow({movie}: {movie: Movie}) {
 
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: 'white',
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 10,
+        paddingVertical: 10,
     },
     image: {
         width: 50,
