@@ -7,7 +7,7 @@ import { useRoute } from "@react-navigation/native"
 import { LinearGradient } from "expo-linear-gradient"
 
 import { getTrailerUrl } from '../services/movieService'
-import { Video } from 'expo-av'
+import { Video, ResizeMode } from 'expo-av'
 import { useState } from "react"
 
 const MovieDetailsScreen = () => {
@@ -49,7 +49,7 @@ const MovieDetailsScreen = () => {
                             source={ {uri: trailer} } // Origem do vídeo
                             rate={ 1.0 } // Velocidade
                             volume={ 1.0 } // Volume
-                            resizeMode="contain"
+                            resizeMode={ResizeMode.CONTAIN}
                             shouldPlay
                             useNativeControls
                             style={ [styles.gradient, { backgroundColor: 'black' }] }
