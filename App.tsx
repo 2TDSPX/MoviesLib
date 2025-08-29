@@ -31,8 +31,12 @@ export default function App() {
               headerBackButtonDisplayMode: 'minimal',
               headerRight: () => (
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('MovieFormScreen', { movie: route.params?.movie })}
-                >
+                  onPress={() => navigation.navigate('MovieFormScreen', {
+                    movie: route.params?.movie,
+                    onSave: (updatedMovie) => {
+                      navigation.setParams({ movie: updatedMovie })
+                    }
+                  })}>
                   <Text style={{ color: '#eb4435', fontSize: 18 }}>
                     Editar
                   </Text>

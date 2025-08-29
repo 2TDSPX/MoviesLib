@@ -1,9 +1,10 @@
 import React, { useState, useLayoutEffect } from 'react'
-import { View, StyleSheet, Text, ScrollView, TextInput, TouchableOpacity } from "react-native"
+import { View, StyleSheet, Text, ScrollView, TextInput, TouchableOpacity, Alert } from "react-native"
 import { s, vs } from "react-native-size-matters"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 
 import { useRoute, useNavigation } from "@react-navigation/native"
+import { addMovie, updateMovie } from "../services/movieService"
 
 const MovieFormScreen = () => {
     const [title, setTitle] = useState("");
@@ -16,6 +17,67 @@ const MovieFormScreen = () => {
     const route = useRoute()
     const navigation = useNavigation()
     const movie = route.params?.movie ?? null;
+    const onSave = route.params?.onSave; // Função de callback que usaremos para refresh
+
+    function isValidUrl(text: string): boolean {
+        try {
+            const url = new URL(text)
+            return url.protocol === "http:" || url.protocol === "https:"
+        } catch {
+            return false
+        }
+    }
+
+    const handleSave = async () => {
+        if (title.length == 0) {
+            Alert.alert("Atenção", "Digite o título do filme")
+            return
+        }
+        const parsedRating = parseFloat(rating.replace(',', '.'));
+        if (Number.isNaN(parsedRating)) {
+            Alert.alert("Atenção", "Informa um valor numérico para a nota (ex.: 8.5)")
+            return
+        }
+        if (duration.length == 0) {
+            Alert.alert("Atenção", "Digite a duração do filme")
+            return
+        }
+        if (categories.length == 0) {
+            Alert.alert("Atenção", "Digite as categorias do filme")
+            return
+        }
+        if (isValidUrl(poster) == false) {
+            Alert.alert("Atenção", "URL do pôster do filme inválida")
+            return
+        }
+        if (synopsis.length == 0) {
+            Alert.alert("Atenção", "Digite a sinopse do filme")
+            return
+        }
+        const movieData = {
+            title,
+            rating: parsedRating,
+            duration,
+            categories,
+            poster,
+            synopsis,
+        }
+        try {
+            let savedMovie
+            if (movie) {
+                savedMovie = await updateMovie(movie.id, movieData)
+            } else {
+                savedMovie = await addMovie(movieData)
+            }
+            if (onSave) {
+                onSave(savedMovie)
+            }
+            navigation.goBack()
+        } catch(error) {
+            console.log(error)
+            Alert.alert('Atenção', "Não foi possível salvar o filme. Tente novamente mais tarde!")
+        }
+    }
 
     useLayoutEffect(() => {
         navigation.setOptions({ title: movie == null ? "Cadastro" : "Edição" });
@@ -91,7 +153,7 @@ const MovieFormScreen = () => {
 
                 {/* Botão de Salvar */}
                 <View style={ styles.buttonArea }>
-                    <TouchableOpacity onPress={() => {}} style={ styles.button }>
+                    <TouchableOpacity onPress={handleSave} style={ styles.button }>
                         <Text style={{color: 'white', fontSize: s(18) }}>
                             { movie == null ? "Cadastrar filme" : "Salvar alterações" }
                         </Text>

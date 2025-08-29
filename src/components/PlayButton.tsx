@@ -1,14 +1,20 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 
-export default function PlayButton() {
+type Props = {
+    onPress: () => void
+}
+
+export default function PlayButton({ onPress }: Props) {
     return(
-        <View style={ styles.container }>
-            <View style={ styles.playButton }>
-                <FontAwesome6 name="play" size={18} color='#EB4435' />
+        <TouchableOpacity onPress={ onPress }>
+            <View style={ styles.container }>
+                <View style={ styles.playButton }>
+                    <FontAwesome6 name="play" size={18} color='#EB4435' />
+                </View>
+                <Text style={ styles.text }>Trailer</Text>
             </View>
-            <Text style={ styles.text }>Trailer</Text>
-        </View>
+        </TouchableOpacity>
     )
 }
 

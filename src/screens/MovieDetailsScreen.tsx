@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, Image, ScrollView } from "react-native"
+import { View, StyleSheet, Text, Image, ScrollView, Alert } from "react-native"
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"    
 import PlayButton from "../components/PlayButton"
@@ -6,10 +6,27 @@ import PlayButton from "../components/PlayButton"
 import { useRoute } from "@react-navigation/native"
 import { LinearGradient } from "expo-linear-gradient"
 
+import { getTrailerUrl } from '../services/movieService'
+import { Video } from 'expo-av'
+import { useState } from "react"
+
 const MovieDetailsScreen = () => {
 
     const route = useRoute()
     const { movie } = route.params as { movie: Movie }
+    const [showVideo, setShowVideo] = useState(false) // Quando true, exibe o trailer
+    const [trailer, setTrailer] = useState("")
+
+    const showTrailer = async () => {
+        try {
+            const trailerUrl = await getTrailerUrl(movie.title)
+            console.log("Trailer do filme: ", trailerUrl)
+            setTrailer(trailerUrl)
+            setShowVideo(true)
+        } catch (error) {
+            Alert.alert("Ops!", "Trailer não encontrado!")
+        }
+    }
 
     return(
         <SafeAreaProvider>
@@ -26,6 +43,18 @@ const MovieDetailsScreen = () => {
                         start={{ x: 0, y: 0.5 }}
                         end={{ x: 0, y: 1 }}
                     />
+
+                    { showVideo && (
+                        <Video
+                            source={ {uri: trailer} } // Origem do vídeo
+                            rate={ 1.0 } // Velocidade
+                            volume={ 1.0 } // Volume
+                            resizeMode="contain"
+                            shouldPlay
+                            useNativeControls
+                            style={ [styles.gradient, { backgroundColor: 'black' }] }
+                        />
+                    )}
                 </View>
 
                 <View style={ styles.content }>
@@ -49,7 +78,7 @@ const MovieDetailsScreen = () => {
                         { movie.categories }
                     </Text>
 
-                    <PlayButton />
+                    <PlayButton onPress={() => showTrailer()} />
 
                     {/* Sinopse */}
                     <ScrollView 
