@@ -16,6 +16,11 @@
       "supportsTablet": true
     },
     "android": {
+      "config": {
+        "goggleMaps": {
+          "apiKey": "AIzaSyB_cMFQHUkeA3sE5QwoSV92gswCwJ-Wr_I"
+        }
+      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
