@@ -1,4 +1,4 @@
-//React Native Maps
+// React Native Maps
 // Expo Location
 // React Native Maps Directions
 
@@ -118,6 +118,16 @@ const MapScreen = () => {
                                     latitude: poi.geometry.location.lat,
                                     longitude: poi.geometry.location.lng,
                                     name: poi.name
+                                })
+
+                                mapRef.current?.animateCamera({
+                                    center: {
+                                        latitude: location.latitude,
+                                        longitude: location.longitude,
+                                    },
+                                    pitch: 60,
+                                    heading: 0,
+                                    altitude: 800,
                                 })
                             }}
                         />
