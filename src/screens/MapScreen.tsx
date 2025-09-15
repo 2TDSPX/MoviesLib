@@ -2,13 +2,16 @@
 // Expo Location
 // React Native Maps Directions
 
-import React, { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useContext } from "react"
 import { View, StyleSheet, Text, ActivityIndicator, TextInput, Keyboard, TouchableOpacity } from "react-native"
 import { SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context'
 import MapView, { Marker } from "react-native-maps"
 import * as Location from 'expo-location'
 import MapViewDirections from "react-native-maps-directions"
 import { searchPOIs, GOOGLE_API_KEY } from "../services/placesService"
+
+import { AppContext } from "../../App"
+import { APP_COLORS } from "../colors/colors"
 
 const MapScreen = () => {
     const [location, setLocation] = useState<any>(null)
@@ -17,6 +20,7 @@ const MapScreen = () => {
     const [pois, setPois] = useState<any[]>([])
     const [selectedPoi, setSelectedPoi] = useState<any>(null)
     const mapRef = useRef<MapView>(null)
+    const { value, setValue } = useContext(AppContext)
 
     useEffect(() => {
         (async () => {
@@ -48,7 +52,7 @@ const MapScreen = () => {
     if (loading) {
         return(
             <View style={styles.center}>
-                <ActivityIndicator size='large' color='#EB4435' />
+                <ActivityIndicator size='large' color={APP_COLORS[Number(value)]} />
                 <Text>Carregando localização...</Text>
             </View>
         )
@@ -76,7 +80,7 @@ const MapScreen = () => {
                         returnKeyType='search'
                     />
                     <TouchableOpacity onPress={searchPOIsHandler}>
-                        <Text style={{ color: '#EB4435', fontSize: 18 }}>Pesquisar</Text>
+                        <Text style={{ color: APP_COLORS[Number(value)], fontSize: 18 }}>Pesquisar</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -99,7 +103,7 @@ const MapScreen = () => {
                             longitude: location.longitude,
                         }}
                         title="Você está aqui"
-                        pinColor='#EB4435'
+                        pinColor={APP_COLORS[Number(value)]}
                     />
 
                     {/* Markers dos POIs */}
@@ -143,7 +147,7 @@ const MapScreen = () => {
                             destination={selectedPoi}
                             apikey={GOOGLE_API_KEY}
                             strokeWidth={6}
-                            strokeColor='#EB4435'
+                            strokeColor={APP_COLORS[Number(value)]}
                         />
                     )}
                 </MapView>

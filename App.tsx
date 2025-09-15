@@ -7,59 +7,88 @@ import MainTabs from './src/components/MainTabs';
 import MovieDetailsScreen from './src/screens/MovieDetailsScreen';
 import MovieFormScreen from './src/screens/MovieFormScreen';
 
+import { useState, useEffect, createContext } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { APP_COLORS } from './src/colors/colors';
+
 const Stack = createNativeStackNavigator();
 const queryClient = new QueryClient()
 
+// Criando objeto de Context que será utilizado por todo o App
+export const AppContext = createContext<{
+  value: string;
+  setValue: (val: string) => void
+}>({
+  value: "",
+  setValue: () => {}
+})
+
 export default function App() {
+  const [value, setValueState] = useState("0")
+  const load = async () => {
+    const storedTheme = await AsyncStorage.getItem("theme")
+    setValueState(storedTheme ?? "0")
+  }
+
+  useEffect(() => {
+    load()
+  }, [])
+
+  const setValue = async (val: string) => {
+    setValueState(val)
+  }
+
   return (
     <QueryClientProvider client={ queryClient }>
-      <NavigationContainer
-        theme={{
-          ...DefaultTheme, colors: { ...DefaultTheme.colors, background: 'white', primary: '#EB4435' }
-        }}
-      >
-        <Stack.Navigator>
-          <Stack.Screen
-            name="MainTabs"
-            component={MainTabs}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="MovieDetailsScreen"
-            component={MovieDetailsScreen}
-            options={({ navigation, route }) => ({
-              headerBackButtonDisplayMode: 'minimal',
-              headerRight: () => (
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('MovieFormScreen', {
-                    movie: route.params?.movie,
-                    onSave: (updatedMovie) => {
-                      navigation.setParams({ movie: updatedMovie })
-                    }
-                  })}>
-                  <Text style={{ color: '#eb4435', fontSize: 18 }}>
-                    Editar
-                  </Text>
-                </TouchableOpacity>
-              )
-            })}
-          />
-          <Stack.Screen
-            name="MovieFormScreen"
-            component={MovieFormScreen}
-            options={({ navigation }) => ({
-              headerBackButtonDisplayMode: 'minimal',
-              headerRight: () => (
-                <TouchableOpacity onPress={() => navigation.popToTop()}>
-                  <Text style={{ color: '#eb4435', fontSize: 18 }}>
-                    Voltar ao início
-                  </Text>
-                </TouchableOpacity>
-              )
-            })}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <AppContext.Provider value={{ value, setValue }}>
+        <NavigationContainer
+          theme={{
+            ...DefaultTheme, colors: { ...DefaultTheme.colors, background: 'white', primary: APP_COLORS[Number(value)] }
+          }}
+        >
+          <Stack.Navigator>
+            <Stack.Screen
+              name="MainTabs"
+              component={MainTabs}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="MovieDetailsScreen"
+              component={MovieDetailsScreen}
+              options={({ navigation, route }) => ({
+                headerBackButtonDisplayMode: 'minimal',
+                headerRight: () => (
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('MovieFormScreen', {
+                      movie: route.params?.movie,
+                      onSave: (updatedMovie) => {
+                        navigation.setParams({ movie: updatedMovie })
+                      }
+                    })}>
+                    <Text style={{ color: APP_COLORS[Number(value)], fontSize: 18 }}>
+                      Editar
+                    </Text>
+                  </TouchableOpacity>
+                )
+              })}
+            />
+            <Stack.Screen
+              name="MovieFormScreen"
+              component={MovieFormScreen}
+              options={({ navigation }) => ({
+                headerBackButtonDisplayMode: 'minimal',
+                headerRight: () => (
+                  <TouchableOpacity onPress={() => navigation.popToTop()}>
+                    <Text style={{ color: APP_COLORS[Number(value)], fontSize: 18 }}>
+                      Voltar ao início
+                    </Text>
+                  </TouchableOpacity>
+                )
+              })}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </AppContext.Provider>
     </QueryClientProvider>
   );
 }

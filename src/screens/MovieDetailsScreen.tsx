@@ -8,7 +8,8 @@ import { LinearGradient } from "expo-linear-gradient"
 
 import { getTrailerUrl } from '../services/movieService'
 import { Video, ResizeMode } from 'expo-av'
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 const MovieDetailsScreen = () => {
 
@@ -27,6 +28,22 @@ const MovieDetailsScreen = () => {
             Alert.alert("Ops!", "Trailer não encontrado!")
         }
     }
+
+    // Função que carrega dados do AsyncStorage
+    const loadData = async () => {
+        try {
+            const storedAutoPlay = await AsyncStorage.getItem("autoPlay")
+            if (storedAutoPlay === "true") {
+                showTrailer()
+            }
+        } catch (error) {
+            console.error("Erro ao carregar os ajustes:", error)
+        }
+    }
+
+    useEffect(() => {
+        loadData()
+    }, [])
 
     return(
         <SafeAreaProvider>

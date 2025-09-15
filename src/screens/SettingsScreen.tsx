@@ -4,11 +4,18 @@ import { useState, useEffect, useContext} from "react"
 import { s, vs } from "react-native-size-matters"
 import SegmentedControl from "@react-native-segmented-control/segmented-control"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { AppContext } from "../../App"
+import { APP_COLORS } from "../colors/colors"
 
 const SettingsScreen = () => {
     const [theme, setTheme] = useState<number | null>(null)
     const [autoPlay, setAutoPlay] = useState<boolean | null>(null)
     const [category, setCategory] = useState<string | null>(null)
+    const { value, setValue } = useContext(AppContext)
+
+    if (!setValue) {
+        throw new Error("AppContext não encontrado. Verifique se AppProvider envolve suas telas")
+    }
 
     const loadData = async () => {
         try {
@@ -31,6 +38,7 @@ const SettingsScreen = () => {
     useEffect(() => {
         if (theme != null) {
             AsyncStorage.setItem("theme", String(theme))
+            setValue(String(theme))
         }
     }, [theme])
 
@@ -64,7 +72,7 @@ const SettingsScreen = () => {
                     <Switch
                         value={autoPlay}
                         onValueChange={setAutoPlay}
-                        trackColor={{false: "#bbbbbb", true: "#EB4435"}}
+                        trackColor={{false: "#bbbbbb", true: APP_COLORS[Number(theme)]}}
                         thumbColor={'white'}
                         ios_backgroundColor="bbbbbb"
                     />

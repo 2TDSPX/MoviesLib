@@ -5,15 +5,18 @@ import MovieListScreen from "../screens/MovieListScreen";
 import MapScreen from "../screens/MapScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 
-//https://icons.expo.fyi/Index
-//<MaterialIcons name="movie" size={24} color="black" />
+import { useContext} from "react"
+import { AppContext } from "../../App"
+import { APP_COLORS } from "../colors/colors"
 
 const Tab = createBottomTabNavigator();
 
 export default function MainTabs() {
+    const { value, setValue } = useContext(AppContext)
+
     return(
         <Tab.Navigator screenOptions={({ route }) => ({
-            tabBarActiveTintColor: "#EB4435",
+            tabBarActiveTintColor: APP_COLORS[Number(value)],
             tabBarInactiveTintColor: "#999",
             tabBarLabelStyle: { fontSize: 12 },
             tabBarIcon: ({ color, size }) => {
@@ -47,7 +50,7 @@ export default function MainTabs() {
             <Tab.Screen
                 name="SettingsScreen"
                 component={SettingsScreen}
-                options={{ title: "Ajustes" }}
+                options={{ title: "Ajustes", headerShown: false }}
             />
         </Tab.Navigator>
     )

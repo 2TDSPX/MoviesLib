@@ -1,10 +1,12 @@
-import React, { useState, useLayoutEffect } from 'react'
+import React, { useState, useLayoutEffect, useContext } from 'react'
 import { View, StyleSheet, Text, ScrollView, TextInput, TouchableOpacity, Alert } from "react-native"
 import { s, vs } from "react-native-size-matters"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 
 import { useRoute, useNavigation } from "@react-navigation/native"
 import { addMovie, updateMovie } from "../services/movieService"
+import { AppContext } from "../../App"
+import { APP_COLORS } from "../colors/colors"
 
 const MovieFormScreen = () => {
     const [title, setTitle] = useState("");
@@ -18,6 +20,7 @@ const MovieFormScreen = () => {
     const navigation = useNavigation()
     const movie = route.params?.movie ?? null;
     const onSave = route.params?.onSave; // Função de callback que usaremos para refresh
+    const { value, setValue } = useContext(AppContext)
 
     function isValidUrl(text: string): boolean {
         try {
@@ -153,7 +156,7 @@ const MovieFormScreen = () => {
 
                 {/* Botão de Salvar */}
                 <View style={ styles.buttonArea }>
-                    <TouchableOpacity onPress={handleSave} style={ styles.button }>
+                    <TouchableOpacity onPress={handleSave} style={ [styles.button, {backgroundColor: APP_COLORS[Number(value)]}] }>
                         <Text style={{color: 'white', fontSize: s(18) }}>
                             { movie == null ? "Cadastrar filme" : "Salvar alterações" }
                         </Text>
@@ -192,7 +195,6 @@ const styles = StyleSheet.create({
     },
     button: {
         flex: 1,
-        backgroundColor: '#eb4435',
         alignItems:  'center',
         justifyContent: 'center',
         borderRadius: 8
