@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import React, { useState, useLayoutEffect, useContext } from 'react'
 import { View, StyleSheet, Text, ScrollView, TextInput, TouchableOpacity, Alert } from "react-native"
 import { s, vs } from "react-native-size-matters"
@@ -21,6 +23,7 @@ const MovieFormScreen = () => {
     const movie = route.params?.movie ?? null;
     const onSave = route.params?.onSave; // Função de callback que usaremos para refresh
     const { value, setValue } = useContext(AppContext)
+    const { t } = useTranslation()
 
     function isValidUrl(text: string): boolean {
         try {
@@ -33,28 +36,28 @@ const MovieFormScreen = () => {
 
     const handleSave = async () => {
         if (title.length == 0) {
-            Alert.alert("Atenção", "Digite o título do filme")
+            Alert.alert(t("attention"), t("emptyTitleMessage"))
             return
         }
         const parsedRating = parseFloat(rating.replace(',', '.'));
         if (Number.isNaN(parsedRating)) {
-            Alert.alert("Atenção", "Informa um valor numérico para a nota (ex.: 8.5)")
+            Alert.alert(t("attention"), t("numericRateMessage"))
             return
         }
         if (duration.length == 0) {
-            Alert.alert("Atenção", "Digite a duração do filme")
+            Alert.alert(t("attention"), t("movieDurationMessage"))
             return
         }
         if (categories.length == 0) {
-            Alert.alert("Atenção", "Digite as categorias do filme")
+            Alert.alert(t("attention"), t("categoriesMessage"))
             return
         }
         if (isValidUrl(poster) == false) {
-            Alert.alert("Atenção", "URL do pôster do filme inválida")
+            Alert.alert(t("attention"), t("invalidURLMessage"))
             return
         }
         if (synopsis.length == 0) {
-            Alert.alert("Atenção", "Digite a sinopse do filme")
+            Alert.alert(t("attention"), t("movieSynopsisMessage"))
             return
         }
         const movieData = {
@@ -78,12 +81,12 @@ const MovieFormScreen = () => {
             navigation.goBack()
         } catch(error) {
             console.log(error)
-            Alert.alert('Atenção', "Não foi possível salvar o filme. Tente novamente mais tarde!")
+            Alert.alert(t("attention"), "Não foi possível salvar o filme. Tente novamente mais tarde!")
         }
     }
 
     useLayoutEffect(() => {
-        navigation.setOptions({ title: movie == null ? "Cadastro" : "Edição" });
+        navigation.setOptions({ title: movie == null ? t("registration") : t("editing") });
         if (movie) {
             setTitle(movie.title || "")
             setRating(movie.rating.toString() || "")
@@ -99,58 +102,58 @@ const MovieFormScreen = () => {
             <SafeAreaView style={ styles.container }>
                 <ScrollView style={ { padding: 20 } }>
                     {/* Título */}
-                    <Text style={ styles.sectionTitle }>TÍTULO</Text>
+                    <Text style={ styles.sectionTitle }>{t("title").toUpperCase()}</Text>
                     <TextInput
                         style={ styles.input }
                         value={ title }
                         onChangeText={ setTitle }
-                        placeholder="Escreva o nome do filme"
+                        placeholder={t("titlePlaceholder")}
                     />
 
                     {/* Nota e Duração */}
-                    <Text style={ styles.sectionTitle }>NOTA E DURAÇÃO</Text>
+                    <Text style={ styles.sectionTitle }>{t("rateAndDuration").toUpperCase()}</Text>
                     <View style={{ flexDirection: 'row', flex: 1, gap: 10 }}>
                         <TextInput
                             style={ styles.input }
                             value={ rating }
                             onChangeText={ setRating }
-                            placeholder="Nota"
+                            placeholder={t("rate")}
                         />
                         <TextInput
                             style={ styles.input }
                             value={ duration }
                             onChangeText={ setDuration }
-                            placeholder="Duração"
+                            placeholder={t("duration")}
                         />
                     </View>
 
                     {/* Categorias */}
-                    <Text style={ styles.sectionTitle }>CATEGORIAS</Text>
+                    <Text style={ styles.sectionTitle }>{t("categories").toUpperCase()}</Text>
                     <TextInput
                         style={ styles.input }
                         value={ categories }
                         onChangeText={ setCategories }
-                        placeholder="Insira as principais categorias"
+                        placeholder={t("categoriesPlaceholder")}
                     />
 
                     {/* Pôster */}
-                    <Text style={ styles.sectionTitle }>PÔSTER</Text>
+                    <Text style={ styles.sectionTitle }>{t("poster")}</Text>
                     <TextInput
                         style={ styles.input }
                         value={ poster }
                         onChangeText={ setPoster }
-                        placeholder="Insira a URL do pôster"
+                        placeholder={t("posterPlaceholder")}
                     />
 
                     {/* Sinopse */}
-                    <Text style={ styles.sectionTitle }>SINOPSE</Text>
+                    <Text style={ styles.sectionTitle }>{t("synopsis").toUpperCase()}</Text>
                     <TextInput
                         style={ [styles.input, { height: vs(120) }] }
                         value={ synopsis }
                         onChangeText={ setSynopsis }
                         multiline
                         textAlignVertical='top'
-                        placeholder="Sinopse do filme"
+                        placeholder={t("synopsisPlaceholder")}
                     />
                 </ScrollView>
 
@@ -158,7 +161,7 @@ const MovieFormScreen = () => {
                 <View style={ styles.buttonArea }>
                     <TouchableOpacity onPress={handleSave} style={ [styles.button, {backgroundColor: APP_COLORS[Number(value)]}] }>
                         <Text style={{color: 'white', fontSize: s(18) }}>
-                            { movie == null ? "Cadastrar filme" : "Salvar alterações" }
+                            { movie == null ? t("registerMovie") : t("saveChanges") }
                         </Text>
                     </TouchableOpacity>
                 </View>

@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import { useContext } from "react"
@@ -10,6 +12,7 @@ type Props = {
 
 export default function PlayButton({ onPress }: Props) {
     const { value, setValue } = useContext(AppContext)
+    const { t } = useTranslation()
 
     return(
         <TouchableOpacity onPress={ onPress }>
@@ -17,7 +20,7 @@ export default function PlayButton({ onPress }: Props) {
                 <View style={ styles.playButton }>
                     <FontAwesome6 name="play" size={18} color={APP_COLORS[Number(value)]} />
                 </View>
-                <Text style={ styles.text }>Trailer</Text>
+                <Text style={ styles.text }>{t("trailer")}</Text>
             </View>
         </TouchableOpacity>
     )

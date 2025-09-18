@@ -1,14 +1,17 @@
-import { View, StyleSheet, Text, Image, ScrollView, Alert } from "react-native"
+import { useTranslation } from "react-i18next";
+import LottieView from "lottie-react-native"
+
+import { View, StyleSheet, Text, Image, ScrollView, Alert, TouchableOpacity } from "react-native"
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"    
 import PlayButton from "../components/PlayButton"
 
-import { useRoute } from "@react-navigation/native"
+import { useFocusEffect, useRoute } from "@react-navigation/native"
 import { LinearGradient } from "expo-linear-gradient"
 
 import { getTrailerUrl } from '../services/movieService'
 import { Video, ResizeMode } from 'expo-av'
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 const MovieDetailsScreen = () => {
@@ -17,6 +20,7 @@ const MovieDetailsScreen = () => {
     const { movie } = route.params as { movie: Movie }
     const [showVideo, setShowVideo] = useState(false) // Quando true, exibe o trailer
     const [trailer, setTrailer] = useState("")
+    const heart = useRef<LottieView>(null)
 
     const showTrailer = async () => {
         try {
@@ -41,9 +45,17 @@ const MovieDetailsScreen = () => {
         }
     }
 
+    const { t } = useTranslation()
+
     useEffect(() => {
         loadData()
     }, [])
+
+    useFocusEffect(
+        useCallback(() => {
+            heart.current?.reset()
+        }, [])
+    )
 
     return(
         <SafeAreaProvider>
@@ -82,6 +94,17 @@ const MovieDetailsScreen = () => {
 
                     {/* Nota */}
                     <View style={{ flexDirection: 'row', marginBottom: 12 }}>
+                        <View style={{ position: 'absolute', top: -24, right: -30}}>
+                            <TouchableOpacity onPress={() => heart.current?.play()}>
+                                <LottieView
+                                    ref={heart}
+                                    source={require("../animations/Heart.json")}
+                                    autoPlay={false}
+                                    loop={false}
+                                    style={styles.heart}
+                                />
+                            </TouchableOpacity>
+                        </View>
                         <AntDesign name="star" size={20} color='#f7cb46' />
                         <Text 
                             style={[styles.text, { marginBottom: 12 }]}
@@ -107,7 +130,7 @@ const MovieDetailsScreen = () => {
                                 fontSize: 18, 
                                 fontWeight: '600'}]}
                         >
-                            Sinopse
+                            {t("synopsis")}
                         </Text>
                         <Text style={[styles.text, { marginBottom: 24 }]}>
                             {movie.synopsis}
@@ -150,5 +173,9 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0
+    },
+    heart: {
+        width: 80,
+        height: 80
     }
 })

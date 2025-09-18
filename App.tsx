@@ -1,3 +1,7 @@
+import "./src/i18n"
+
+import { useTranslation } from "react-i18next";
+
 import { Button, StyleSheet, TouchableOpacity, Text} from 'react-native';
 import { NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -38,6 +42,8 @@ export default function App() {
     setValueState(val)
   }
 
+  const { t } = useTranslation()
+
   return (
     <QueryClientProvider client={ queryClient }>
       <AppContext.Provider value={{ value, setValue }}>
@@ -66,7 +72,7 @@ export default function App() {
                       }
                     })}>
                     <Text style={{ color: APP_COLORS[Number(value)], fontSize: 18 }}>
-                      Editar
+                      {t("edit")}
                     </Text>
                   </TouchableOpacity>
                 )
